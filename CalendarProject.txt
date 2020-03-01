@@ -1,0 +1,146 @@
+Imports System.IO
+
+Public Class Form1
+    Dim YearInt As String = Convert.ToInt32("0")
+    Dim NumOfDays As Integer = 0
+    Dim DaysAsInt As Integer = 0
+    Dim NextString As List(Of String) = New List(Of String)
+
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim InputFileMonths As FileStream = New FileStream("Months.txt", FileMode.Open, FileAccess.Read)
+        Dim ReaderMonths As StreamReader = New StreamReader(InputFileMonths)
+
+        Do While Not ReaderMonths.EndOfStream
+            Dim NextLine As String = ReaderMonths.ReadLine()
+            MonthSelector.Items.Add(NextLine)
+        Loop
+
+
+        Dim InputFileDays As FileStream = New FileStream("Days.txt", FileMode.Open, FileAccess.Read)
+        Dim ReaderDays As StreamReader = New StreamReader(InputFileDays)
+
+        Do While Not ReaderDays.EndOfStream
+            Dim NextLine As String =
+                ReaderDays.ReadLine()
+            DaySelector.Items.Add(NextLine)
+        Loop
+
+    End Sub
+
+    Private Sub YearBox_TextChanged(sender As Object, e As EventArgs) Handles YearBox.TextChanged
+        YearInt = YearBox.Text
+
+    End Sub
+
+    Private Sub CalendarGenerate_Click(sender As Object, e As EventArgs) Handles CalendarButton.Click
+
+        Select Case MonthSelector.SelectedItem
+
+            Case "January"
+                NumOfDays = 31
+
+            Case "February"
+                If YearInt Mod 400 = 0 Then
+                    NumOfDays = 29
+                ElseIf YearInt Mod 4 = 0 And YearInt Mod 100 <> 0 Then
+                    NumOfDays = 29
+                Else
+                    NumOfDays = 28
+                End If
+
+            Case "March"
+                NumOfDays = 31
+
+            Case "April"
+                NumOfDays = 30
+
+            Case "May"
+                NumOfDays = 31
+
+            Case "June"
+                NumOfDays = 30
+
+            Case "July"
+                NumOfDays = 31
+
+            Case "August"
+                NumOfDays = 31
+
+            Case "September"
+                NumOfDays = 30
+
+            Case "October"
+                NumOfDays = 31
+
+            Case "November"
+                NumOfDays = 30
+
+            Case "December"
+                NumOfDays = 31
+
+        End Select
+
+        Select Case DaySelector.SelectedItem
+            Case "Sunday"
+                DaysAsInt = 0
+            Case "Monday"
+                DaysAsInt = 1
+            Case "Tuesday"
+                DaysAsInt = 2
+            Case "Wednesday"
+                DaysAsInt = 3
+            Case "Thursday"
+                DaysAsInt = 4
+            Case "Friday"
+                DaysAsInt = 5
+            Case "Saturday"
+                DaysAsInt = 6
+
+        End Select
+
+        YearMonthLabel.Text = MonthSelector.SelectedItem & " " & YearInt
+        DaysOfWeekLabel.Visible = True
+        CalendarLabel.Visible = True
+
+
+        For i As UInteger = 1 To DaysAsInt
+            CalendarLabel.Text += "    "
+        Next i
+
+        For i As UInteger = 1 To NumOfDays
+            DaysAsInt += 1
+            If DaysAsInt Mod 7 = 0 Then
+                CalendarLabel.Text += "  " & i & vbNewLine
+            Else
+                CalendarLabel.Text += "  " & i & " "
+            End If
+
+
+        Next i
+
+        ClearButton.Visible = True
+        CalendarButton.Visible = False
+
+    End Sub
+
+    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
+        YearBox.Text = ""
+        MonthSelector.Text = ""
+        DaySelector.Text = ""
+        YearMonthLabel.Text = ""
+        CalendarLabel.Text = ""
+        DaysOfWeekLabel.Visible = False
+        CalendarLabel.Visible = False
+        CalendarButton.Visible = True
+        ClearButton.Visible = False
+
+
+
+    End Sub
+
+
+
+
+
+End Class
